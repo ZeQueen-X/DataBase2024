@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'editprofile' %}" class="button">编辑个人信息</a>
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'inoutdorm' %}" class="button">入宿退宿</a>
+        <a href="{% url 'visit' %}" class="button">访客申请</a>
+        <a href="{% url 'repair' %}" class="button">报修</a>
+    </div>
+    <div class="content">
+       <div class="col-9">
+                <h1>个人信息</h1>
+                {% if student %}
+                    {% if icon %}
+    <img src="{{ icon.image.url }}" alt="头像">
+{% else %}
+    <p>暂无头像</p>
+{% endif %}
+                    <p>学生ID: {{ student.student_id }}</p>
+                    <p>姓名: {{ student.name }}</p>
+                    <p>年龄: {{ student.age }}</p>
+                    <p>电话: {{ student.phone }}</p>
+                    {%  if student.dorm %}
+                        <p>宿舍: {{ student.dorm.Dorm_id }}</p>
+                        {% else %}
+                        <p>宿舍: 暂无</p>
+                    {% endif %}    
+                {% else %}
+                    <p>{{ error }}</p>
+                {% endif %}
+            </div>
+    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+
+<body> 
+    <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'editprofile' %}" class="button">编辑个人信息</a>
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'inoutdorm' %}" class="button">入宿退宿</a>
+        <a href="{% url 'visit' %}" class="button">访客申请</a>
+        <a href="{% url 'repair' %}" class="button">报修</a>
+    </div>
+    <div class="content">
+        <div class="title">
+            报修提交
+        </div>
+        <form method="post" action="{% url 'repair' %}">
+            {% csrf_token %}
+            <div class="form-section">
+                <div class="form-column">
+                    <label for="building">报修楼宇：</label>
+                    <select id="building" name="building" required>
+                        {% for build in building %}
+                        <option value="{{ build.name }}">{{ build.name }}</option>
+                        {% endfor %}
+                    </select>
+
+
+                </div>
+                <div class="form-column">
+                    <label for="description">描述：</label>
+                    <textarea id="description" name="description" placeholder="描述，不超过200字"></textarea>
+                </div>
+                <div class="form-column">
+                    <button type="submit">提交</button>
+                </div>
+            </div>
+        </form>
+        <div class="title">
+            我的报修
+        </div>
+        <div class="info-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>报修日期</th>
+                        <th>描述</th>
+                        <th>维修状态</th>
+                        <th>对应楼宇</th>
+                        <th>删除</th>
+                    </tr>
+                </thead>
+                {% for repair in repair %}
+
+                <tbody>
+                    <tr>
+                        <td>{{ repair.repair_date}}</td>
+                        <td>{{ repair.description }}</td>
+                        <td>
+                            {% if repair.completed %}
+                            已处理
+                            {% else %}
+                            未处理
+                            {% endif %}
+                        </td>
+                        <td>{{ repair.building }}</td>
+                        <td>
+                            <form action="{% url 'delete_repair' repair.repair_id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">暂无报修申请</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

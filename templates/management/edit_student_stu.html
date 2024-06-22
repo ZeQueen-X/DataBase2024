@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'editprofile' %}" class="button">编辑个人信息</a>
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'inoutdorm' %}" class="button">入宿退宿</a>
+        <a href="{% url 'visit' %}" class="button">访客申请</a>
+        <a href="{% url 'repair' %}" class="button">报修</a>
+    </div>
+    <div class="content">
+       <div class="col-9">
+                <div class="title">
+                更新个人信息
+            </div>
+           <form method="post" action="{% url 'editprofile' %}">
+               <label for="name">姓名:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="age">年龄:</label>
+            <input type="number" id="age" name="age" required><br>
+            <label for="gender">性别:</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>请选择性别</option>
+            <option value="男">男</option>
+            <option value="女">女</option>
+            </select><br>
+            <label for="phone">电话:</label>
+            <input type="text" id="phone" name="phone" required><br>
+               <label for="icon">头像:</label>
+               <select id="icon" name="icon" required>
+                   {% for img in img %}
+                            <option value="{{ img.id }}">{{ img.title }}</option>
+                   {% endfor %}
+               </select><br>
+            <label for="password">新密码:</label>
+            <input type="password" id="password" name="password" required><br>
+               {% csrf_token %}
+               <button type="submit">更新信息</button>
+           </form>
+            </div>
+    </div>
+        <a href="{% url 'image_upload' %}" class="button" style="height: 60px">上传头像</a>
+    </div>
+</body>
+</html>

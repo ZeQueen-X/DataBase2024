@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style_su.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'dormmanager' %}" class="button">宿管管理</a>
+        <a href="{% url 'dormbuilding' %}" class="button">楼宇管理</a>
+        <a href="{% url 'student' %}" class="button">学生管理</a>
+    </div>
+    <div class="content">
+        <div class="title">
+            新增宿管
+        </div>
+        <form method="post" action="{% url 'dormmanager' %}">
+            {% csrf_token %}
+            <div class="form-section">
+                <div class="form-column">
+                    <label for="dormmanager_id">宿管ID：</label>
+                    <input type="text" id="dormmanager_id" name="dormmanager_id" required>
+                    <label for="name">宿管姓名：</label>
+                    <input type="text" id="name" name="name" required><br>
+                    <label for="phone">宿管电话：</label>
+                    <input type="text" id="phone" name="phone" required><br>
+                    <label for="age">宿管年龄：</label>
+                    <input type="number" id="age" name="age" required><br>
+
+
+
+                </div>
+                <div class="form-column">
+                    <label for="password">账号密码：</label>
+                    <input type="password" id="password" name="password" required><br>
+                    <label for="gender">性别:</label>
+                     <select id="gender" name="gender" required>
+                    <option value="">请选择性别</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                    </select><br>
+                    <label for="building">管理楼宇：</label>
+                    <select id="building" name="building">
+                        {% for build in building %}
+                        <option value="{{ build.id }}">{{ build.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-column">
+                    <button type="submit">提交</button>
+                </div>
+            </div>
+        </form>
+        <div class="title">
+            管理宿管
+        </div>
+        <div class="info-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th><a href="{% if current_sort != 'dormmanager_id' %}?sort=dormmanager_id{% else %}?sort=-dormmanager_id{% endif %}">宿管ID</a></th>
+<th><a href="{% if current_sort != 'name' %}?sort=name{% else %}?sort=-name{% endif %}">宿管名称</a></th>
+<th><a href="{% if current_sort != 'gender' %}?sort=gender{% else %}?sort=-gender{% endif %}">宿管性别</a></th>
+<th><a href="{% if current_sort != 'age' %}?sort=age{% else %}?sort=-age{% endif %}">宿管年龄</a></th>
+<th><a href="{% if current_sort != 'phone' %}?sort=phone{% else %}?sort=-phone{% endif %}">宿管电话</a></th>
+<th><a href="{% if current_sort != 'building' %}?sort=building{% else %}?sort=-building{% endif %}">对应楼宇</a></th>
+
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                {% for dm in dormmanagers_all_data %}
+
+                <tbody>
+                    <tr>
+                        <td>{{ dm.dm_id}}</td>
+                        <td>{{ dm.dm_name }}</td>
+                        <td>{{ dm.dm_gender }}</td>
+                        <td>{{ dm.dm_age }}</td>
+                        <td>{{ dm.dm_phone }}</td>
+                        <td>{% if dm.dm_building  %}
+                            {{ dm.dm_building }}{% else %}暂无管理楼宇{% endif %}</td>
+                        
+                        <td>
+                            <a href="{% url 'edit_dormmanager' dm.dm_id %}" class="button">编辑</a>
+                            <form action="{% url 'delete_dormmanager' dm.dm_id%}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">删除</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">暂无宿管信息</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            alert('{{ message }}');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

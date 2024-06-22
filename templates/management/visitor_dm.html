@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style_dm.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'student' %}" class="button">查看学生</a>
+        <a href="{% url 'inoutdorm' %}" class="button">入宿退宿处理</a>
+        <a href="{% url 'repair' %}" class="button">报修处理</a>
+        <a href="{% url 'visit' %}" class="button">访客申请处理</a>
+    </div>
+    <div class="content">
+        <div class="title">
+            管理访客申请
+        </div>
+        <div class="info-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th><a href="{% if current_sort != 'visit_date' %}?sort=visit_date{% else %}?sort=-visit_date{% endif %}">访问日期</a></th>
+<th><a href="{% if current_sort != 'applicant' %}?sort=applicant{% else %}?sort=-applicant{% endif %}">申请人</a></th>
+<th>访客电话</th>
+                    <th><a href="{% if current_sort != 'applicant_date' %}?sort=applicant_date{% else %}?sort=-applicant_date{% endif %}">申请时间</a></th>
+                    <th>申请理由</th>
+                        <th><a href="{% if current_sort != 'state' %}?sort=state{% else %}?sort=-state{% endif %}">状态</a></th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                {% for vs in visitors %}
+
+                <tbody>
+                    <tr>
+                        <td>{{ vs.visit_date}}</td>
+                        <td>{{ vs.applicant.student_id}}</td>
+                    <td>{{ vs.phone }}</td>
+                        <td>{{ vs.applicant_date }}</td>
+                    <td>{{ vs.reason }}</td>
+                        <td>{% if vs.state == 0 %}
+                            未处理{% elif vs.state == 1 %}已批准{% elif vs.state == 2 %}申请未通过{% endif %}</td>
+                        <td>
+                            {% if vs.state == 0 %}
+                            <form action="{% url 'visit_ac' vs.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">批准</button>
+                            </form>
+                            <form action="{% url 'visit_dn' vs.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">拒绝</button>
+                            </form>
+                            {% else %}已完成处理{% endif %}
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">暂无访客申请</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            alert('{{ message }}');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

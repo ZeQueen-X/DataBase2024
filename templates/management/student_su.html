@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style_su.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'dormmanager' %}" class="button">宿管管理</a>
+        <a href="{% url 'dormbuilding' %}" class="button">楼宇管理</a>
+        <a href="{% url 'student' %}" class="button">学生管理</a>
+    </div>
+    <div class="content">
+        <div class="title">
+            管理学生
+        </div>
+        <div class="info-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th><a href="{% if current_sort != 'student_id' %}?sort=student_id{% else %}?sort=-student_id{% endif %}">学生ID</a></th>
+<th><a href="{% if current_sort != 'name' %}?sort=name{% else %}?sort=-name{% endif %}">姓名</a></th>
+<th><a href="{% if current_sort != 'gender' %}?sort=gender{% else %}?sort=-gender{% endif %}">性别</a></th>
+<th><a href="{% if current_sort != 'age' %}?sort=age{% else %}?sort=-age{% endif %}">年龄</a></th>
+<th><a href="{% if current_sort != 'phone' %}?sort=phone{% else %}?sort=-phone{% endif %}">电话</a></th>
+<th><a href="{% if current_sort != 'dorm' %}?sort=dorm{% else %}?sort=-dorm{% endif %}">对应宿舍</a></th>
+                    <th><a href="{% if current_sort != 'status' %}?sort=status{% else %}?sort=-status{% endif %}">状态</a></th>
+
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                {% for stu in student_all_data%}
+
+                <tbody>
+                    <tr>
+                        <td>{{ stu.stu_id}}</td>
+                        <td>{{ stu.stu_name }}</td>
+                        <td>{{ stu.stu_gender }}</td>
+                        <td>{{ stu.stu_age }}</td>
+                        <td>{{ stu.stu_phone }}</td>
+                        <td>{% if stu.stu_dorm  %}
+                            {{ stu.stu_dorm.Dorm_id }}{% else %}暂无宿舍{% endif %}</td>
+                        <td>{% if stu.stu_status ==  0 %} }}未入住{% elif stu.stu_status == 1%} 正在申请入住 {% elif stu.stu_status == 2 %}已入住{% elif stu.stu_status == 3 %}
+                        正在申请退宿{% endif %}</td>
+                        <td>
+                            <form action="{% url 'delete_student' stu.stu_id%}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">删除</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">暂无学生</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            alert('{{ message }}');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

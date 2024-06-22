@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style_dm.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'student' %}" class="button">查看学生</a>
+        <a href="{% url 'inoutdorm' %}" class="button">入宿退宿处理</a>
+        <a href="{% url 'repair' %}" class="button">报修处理</a>
+        <a href="{% url 'visit' %}" class="button">访客申请处理</a>
+    </div>
+    <div class="content">
+        <div class="title">
+            处理入宿退宿申请
+        </div>
+        <div class="info-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th><a href="{% if current_sort != 'applicant_date' %}?sort=applicant_date{% else %}?sort=-applicant_date{% endif %}">申请日期</a></th>
+                        <th><a href="{% if current_sort != 'applicant' %}?sort=applicant{% else %}?sort=-applicant{% endif %}">姓名</a></th>
+                        <th><a href="{% if current_sort != 'apply_type' %}?sort=apply_type{% else %}?sort=-apply_type{% endif %}">申请类型</a></th>
+
+
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                {% for app in apply %}
+
+                <tbody>
+                    <tr>
+                        <td>{{ app.applicant_date}}</td>
+                        <td>{{ app.applicant.name }}</td>
+                        <td>{% if app.apply_type ==  0%}申请入宿{% else %}申请退宿{% endif %}</td>
+                        <td>
+                        {% if app.apply_type == 0 %}
+                            <form action="{% url 'apply_in' app.applicant.student_id %}" method="POST">
+                                <label for="dorm">选择宿舍：</label>
+                                <select id="dorm" name="dorm" required>
+                                {% for dm in dorm %}
+                                    <option value="{{ dm.Dorm_id }}">{{ dm.Dorm_id }}</option>
+                                    
+                                {% endfor %}
+                                </select>
+                                {% csrf_token %}
+                                <button type="submit">同意入宿</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'apply_out' app.applicant.student_id %}" method="POST">
+                            {% csrf_token %}
+                                <button type="submit">同意退宿</button>
+                            </form>
+                        {% endif %}
+                        <form action="{% url 'apply_denied' app.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit">拒绝申请</button>
+                        </form>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">暂无申请</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            alert('{{ message }}');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style_dm.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'student' %}" class="button">查看学生</a>
+        <a href="{% url 'inoutdorm' %}" class="button">入宿退宿处理</a>
+        <a href="{% url 'repair' %}" class="button">报修处理</a>
+        <a href="{% url 'visit' %}" class="button">访客申请处理</a>
+    </div>
+    <div class="content">
+        <h1>欢迎宿管{{ dm.name }}！</h1>
+        <div class="statistics">
+            <div class="stat-item">
+                <h2>个人信息</h2>
+                <p>宿管ID：{{ dm.dormmanager_id }}</p>
+                <p>姓名：{{ dm.name }}</p>
+                <p>电话：{{ dm.phone }}</p>
+                <p>管理楼宇：{% if dm.building %}{{ dm.building.name }}{% else %}暂无管理楼宇{% endif %} </p>
+            </div>
+            <div class="stat-item">
+                <h2>宿舍数量</h2>
+                <p>{{ dorm_count}}</p>
+            </div>
+            <div class="stat-item">
+                <h2>学生数量</h2>
+                <p>{{ stu_count }}</p>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</body>
+</html>

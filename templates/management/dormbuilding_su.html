@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+       <link rel="stylesheet" href="{% static 'css/style_su.css'%}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'dormmanager' %}" class="button">宿管管理</a>
+        <a href="{% url 'dormbuilding' %}" class="button">楼宇管理</a>
+        <a href="{% url 'student' %}" class="button">学生管理</a>
+    </div>
+    <div class="content">
+        <div class="title">
+            新增楼宇和宿舍
+        </div>
+        
+            <div class="form-section">
+                
+                <div class="form-column">
+                    <form method="post" action="{% url 'dormbuilding' %}">
+                {% csrf_token %}
+                    <label for="bd_name">楼宇名称：</label>
+                    <input type="text" id="bd_name" name="bd_name" required>
+                        <button type="submit">提交</button>
+                     </form>
+                </div>
+                <div class="form-column">
+                    <form method="post" action="{% url 'dorm' %}">
+                {% csrf_token %}
+                    <label for="dorm_id">宿舍ID：</label>
+                    <input type="number" id="dorm_id" name="dorm_id" required><br>
+                        <label for="building">所属楼宇：</label>
+                    <select id="building" name="building" required style="width: 200px;">
+                        {% for build in bds_data %}
+                        <option value="{{ build.bd_name }}">{{ build.bd_name }}</option>
+                        {% endfor %}
+                    </select><br>
+                        <button type="submit">提交</button>
+                     </form>
+                </div>
+            </div>
+       
+        <div class="title">
+            宿舍管理
+        </div>
+        <div class="info-section">
+            <div class = 'left-right'>
+                <div class="form-column">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>楼宇名称</th>
+                        <th>宿舍数量</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    {% for bd in bds_data %}
+                    <tbody>
+                        <tr>
+                            <td><a href="?filter={{ bd.bd_id }}">{{ bd.bd_name }}</a></td>
+                            <td>{{ bd.dm_count }}</td>
+                            <td>
+                                <form action="{% url 'deletebuilding' bd.bd_id%}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">删除</button>
+                            </form>
+                            </td>
+                        </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">暂无楼宇</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <div class="form-column">
+                    <table>
+                    <thead>
+                    <tr>
+                        <th>宿舍ID</th>
+                        <th>所属楼宇</th>
+                        <th>宿舍成员数量</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    {% for dorm in dorms_data %}
+                    <tbody>
+                        <tr>
+                            <td>{{ dorm.dorm_id }}</td>
+                            <td>{{ dorm.dorm_bd }}</td>
+                            <td>{{ dorm.count }}</td>
+                            <td>
+                                <form action="{% url 'deletedorm' dorm.dorm_id%}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">删除</button>
+                            </form>
+                            </td>
+                        </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">该楼宇暂无宿舍</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            alert('{{ message }}');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

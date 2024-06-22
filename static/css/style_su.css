@@ -1,0 +1,151 @@
+a {
+    color: inherit; /* 继承父元素的颜色，或指定一个具体的颜色 */
+    text-decoration: none; /* 移除下划线 */
+}
+        body {
+            display: flex;
+            margin: 0;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #e9ecef;
+            flex-direction: column;
+        }
+        .main{
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+        }
+        .left-right{
+            display: flex !important;
+            justify-content: space-between;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #343a40;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            justify-content: space-around;
+            box-shadow: 3px 0 5px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #ccac20;
+            color: white;
+            border: none;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #715e12;
+        }
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px; /* 留出足够空间 */
+            padding: 10px;
+            background-color: #f8f9fa;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-section {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .form-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+        textarea, input {
+            padding: 8px;
+            margin-bottom: 10px; /* 输入字段间距 */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        textarea {
+            height: 150px;
+        }
+        .info-section {
+            flex-grow: 1;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        div.form-column button.notpermit {
+    background-color: #323030 !important;
+}
+        .button {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 5px;
+    background-color: #ccac20;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;  /* 去除下划线 */
+    font-weight: bold;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #343a40;
+    color: white;
+    padding: 10px 20px;
+}
+
+.nav-links a, .nav-buttons a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+.button:hover {
+    background-color: #715e12;
+    text-decoration: none;  /* 鼠标悬浮时也不显示下划线 */
+}
+
+.statistics {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    flex-basis: 20%;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 10px;
+}
+
+.stat-item h2 {
+    color: #333;
+}
+
+.stat-item p {
+    font-size: 24px;
+    color: #555;
+}

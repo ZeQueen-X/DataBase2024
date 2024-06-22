@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+
+<body>
+    <nav class="navbar">
+    <div class="nav-links">
+    </div>
+    <div class="nav-buttons">
+        <a href="{% url 'editprofile' %}" class="button">编辑个人信息</a>
+        <a href="{% url 'logout' %}" class="button">退出登录</a>
+    </div>
+    </nav>
+    <div class = main>
+    <div class="sidebar">
+        <a href="{% url 'dashboard' %}" class="button">主页</a>
+        <a href="{% url 'inoutdorm' %}" class="button">入宿退宿</a>
+        <a href="{% url 'visit' %}" class="button">访客申请</a>
+        <a href="{% url 'repair' %}" class="button">报修</a>
+    </div>
+    <div class="content">
+        <div class="title">
+            申请访客
+        </div>
+        <form method="post" action="{% url 'visit' %}">
+            {% csrf_token %}
+            <div class="form-section">
+                <div class="form-column">
+                    <label for="phone">访客电话</label>
+                    <input type="text" id="phone" name="phone" required><br>
+                    <label for="visit_date">访问日期</label>
+                    <input type="date" id="visit_date" name="visit_date" required><br>
+                </div>
+                <div class="form-column">
+                    <label for="reason">申请理由：</label>
+                    <textarea id="reason" name="reason" placeholder="理由，不超过200字"></textarea>
+                </div>
+                <div class="form-column">
+                    <button type="submit">提交</button>
+                </div>
+            </div>
+        </form>
+        <div class="title">
+            我的报修
+        </div>
+        <div class="info-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>申请日期</th>
+                        <th>访问日期</th>
+                        <th>访客电话</th>
+                        <th>申请理由</th>
+                        <th>批准状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visitor in visitors %}
+                    <tr>
+                        <td>{{ visitor.applicant_date}}</td>
+                        <td>{{ visitor.visit_date}}</td>
+                        <td>{{ visitor.visitor_phone}}</td>
+                        <td>{{ visitor.reason}}</td>
+                        <td>
+                            {% if visitor.state == 0 %}
+                            未处理
+                            {% elif visitor.state == 1 %}
+                            已批准
+                            {% elif visitor.state == 2 %}
+                            申请不通过
+                            {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">暂无申请.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            alert('{{ message }}');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+</body>
+
+</html>
